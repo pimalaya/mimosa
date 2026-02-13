@@ -1,0 +1,22 @@
+[accounts.example]
+
+# Make this current account the default one to use when no account is
+# specified in the CLI with the --account argument.
+#
+default = true
+
+# Keyring backend: stores passwords in the system keyring.
+# Requires a keyring feature (dbus-secret-service, apple-native,
+# or windows-native).
+#
+[accounts.example.backend.keyring]
+service = "my-app"
+user = "me@example.com"
+
+# Command backend: delegates password management to shell commands.
+# Requires the `command` feature.
+#
+#[accounts.example.backend.command]
+#get = ["pass", "show", "my-app/me"]
+#set = ["pass", "insert", "-e", "my-app/me"]
+#delete = ["pass", "rm", "my-app/me"]
