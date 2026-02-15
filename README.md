@@ -17,8 +17,8 @@ CLI to manage passwords
 - Simple **CRUD** operations for passwords
 - Multiple **keyring** backends via cargo features:
   - D-Bus Secret Service on Linux (requires `dbus-secret-service` feature)
-  - Apple Keychain on macOS (requires `apple-native` feature)
-  - Windows Credential Manager (requires `windows-native` feature)
+  - Apple Keychain on macOS (requires `apple-keychain` feature)
+  - Windows Credential Manager (requires `windows-credential-manager` feature)
 - Shell **command** backend (requires `command` feature)
 - **TOML** configuration
 - **JSON** output with `--json`

@@ -49,7 +49,7 @@ impl StoreExt for MacosStore {
 
 impl MacosStore {
     #[cfg(target_os = "macos")]
-    #[cfg(feature = "apple-native")]
+    #[cfg(feature = "apple-keychain")]
     fn init(&self) -> Result<()> {
         let store = apple_native_keyring_store::keychain::Store::new()
             .map_err(|err| anyhow!("{err}"))
@@ -59,13 +59,13 @@ impl MacosStore {
     }
 
     #[cfg(target_os = "macos")]
-    #[cfg(not(feature = "apple-native"))]
+    #[cfg(not(feature = "apple-keychain"))]
     fn init(&self) -> Result<()> {
-        bail!("Feature `apple-native` is missing");
+        bail!("Feature `apple-keychain` is missing");
     }
 
     #[cfg(not(target_os = "macos"))]
     fn init(&self) -> Result<()> {
-        bail!("Feature `apple-native` is not available on this platform");
+        bail!("Feature `apple-keychain` is not available on this platform");
     }
 }

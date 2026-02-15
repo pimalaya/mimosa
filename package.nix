@@ -11,6 +11,7 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellFiles,
   lib,
+  openssl,
   pkg-config,
   rustPlatform,
   stdenv,
@@ -31,8 +32,8 @@ let
   exe = stdenv.hostPlatform.extensions.executable;
 
   # dbus-secret-service feature is part of default cargo features
-  hasDbusSecretServiceFeature =
-    !buildNoDefaultFeatures || builtins.elem "dbus-secret-service" buildFeatures;
+  hasSecretService = hasDbusSecretService || builtins.elem "zbus-secret-service" buildFeatures;
+  hasDbusSecretService = !buildNoDefaultFeatures || builtins.elem "dbus-secret-service" buildFeatures;
 
   dbus' = dbus.overrideAttrs (old: {
     env = (old.env or { }) // {
@@ -56,20 +57,26 @@ rustPlatform.buildRustPackage {
     rev = "v${version}";
   };
 
+  env = {
+    # OpenSSL should not be provided by vendors, not even on Windows
+    OPENSSL_NO_VENDOR = "1";
+  };
+
   nativeBuildInputs =
     [ ]
-    ++ lib.optional hasDbusSecretServiceFeature pkg-config
+    ++ lib.optional hasDbusSecretService pkg-config
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs =
     [ ]
+    ++ lib.optional hasSecretService openssl
     # D-Bus is provided by vendors on Windows
-    ++ lib.optional (hasDbusSecretServiceFeature && !isWindows) dbus';
+    ++ lib.optional (hasDbusSecretService && !isWindows) dbus';
 
   buildFeatures =
     buildFeatures
     # D-Bus is provided by vendors on Windows
-    ++ lib.optional (hasDbusSecretServiceFeature && isWindows) "vendored";
+    ++ lib.optional (hasDbusSecretService && isWindows) "vendored";
 
   doCheck = false;
 

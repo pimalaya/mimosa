@@ -64,35 +64,35 @@ impl TryFrom<Store> for super::store::Store {
                 bail!("missing feature: enable `dbus-secret-service` or `zbus-secret-service`");
             }
 
-            #[cfg(feature = "linux-keyutils")]
+            #[cfg(feature = "keyutils")]
             StoreKind::LinuxKeyutils => {
                 let store = entry
                     .linux_keyutils
-                    .context("missing `linux-keyutils` configuration")?;
+                    .context("missing `keyutils` configuration")?;
                 Ok(Self::LinuxKeyutils(store))
             }
-            #[cfg(not(feature = "linux-keyutils"))]
-            StoreKind::LinuxKeyutils => bail!(feat!("linux-keyutils")),
+            #[cfg(not(feature = "keyutils"))]
+            StoreKind::LinuxKeyutils => bail!(feat!("keyutils")),
 
-            #[cfg(feature = "apple-native")]
+            #[cfg(feature = "apple-keychain")]
             StoreKind::AppleNative => {
                 let store = entry
                     .apple_native
-                    .context("missing `apple-native` configuration")?;
+                    .context("missing `apple-keychain` configuration")?;
                 Ok(Self::Macos(store))
             }
-            #[cfg(not(feature = "apple-native"))]
-            StoreKind::AppleNative => bail!(feat!("apple-native")),
+            #[cfg(not(feature = "apple-keychain"))]
+            StoreKind::AppleNative => bail!(feat!("apple-keychain")),
 
-            #[cfg(feature = "windows-native")]
+            #[cfg(feature = "windows-credential-manager")]
             StoreKind::WindowsNative => {
                 let store = entry
                     .windows_native
-                    .context("missing `windows-native` configuration")?;
+                    .context("missing `windows-credential-manager` configuration")?;
                 Ok(Self::Windows(store))
             }
-            #[cfg(not(feature = "windows-native"))]
-            StoreKind::WindowsNative => bail!(feat!("windows-native")),
+            #[cfg(not(feature = "windows-credential-manager"))]
+            StoreKind::WindowsNative => bail!(feat!("windows-credential-manager")),
         }
     }
 }

@@ -49,7 +49,7 @@ impl StoreExt for KeyutilsStore {
 
 impl KeyutilsStore {
     #[cfg(target_os = "linux")]
-    #[cfg(feature = "linux-keyutils")]
+    #[cfg(feature = "keyutils")]
     fn init(&self) -> Result<()> {
         let store = linux_keyutils_keyring_store::Store::new()
             .map_err(|err| anyhow!("{err}"))
@@ -59,13 +59,13 @@ impl KeyutilsStore {
     }
 
     #[cfg(target_os = "linux")]
-    #[cfg(not(feature = "linux-keyutils"))]
+    #[cfg(not(feature = "keyutils"))]
     fn init(&self) -> Result<()> {
-        bail!("Feature `linux-keyutils` is missing");
+        bail!("Feature `keyutils` is missing");
     }
 
     #[cfg(not(target_os = "linux"))]
     fn init(&self) -> Result<()> {
-        bail!("Feature `linux-keyutils` is not available on this platform");
+        bail!("Feature `keyutils` is not available on this platform");
     }
 }

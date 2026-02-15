@@ -4,9 +4,9 @@
 #
 # Possible values:
 #   "secret-service"  - Secret Service (Linux, FreeBSD)
-#   "linux-keyutils"  - Linux kernel keyutils (Linux, non-persistent)
-#   "apple-native"    - Apple Keychain (macOS)
-#   "windows-native"  - Windows Credential Manager (Windows)
+#   "keyutils"  - Linux kernel keyutils (Linux, non-persistent)
+#   "apple-keychain"    - Apple Keychain (macOS)
+#   "windows-credential-manager"  - Windows Credential Manager (Windows)
 #
 store = "secret-service"
 

@@ -49,7 +49,7 @@ impl StoreExt for WindowsStore {
 
 impl WindowsStore {
     #[cfg(target_os = "windows")]
-    #[cfg(feature = "windows-native")]
+    #[cfg(feature = "windows-credential-manager")]
     fn init(&self) -> Result<()> {
         let store = windows_native_keyring_store::Store::new()
             .map_err(|err| anyhow!("{err}"))
@@ -59,13 +59,13 @@ impl WindowsStore {
     }
 
     #[cfg(target_os = "windows")]
-    #[cfg(not(feature = "windows-native"))]
+    #[cfg(not(feature = "windows-credential-manager"))]
     fn init(&self) -> Result<()> {
-        bail!("Feature `windows-native` is missing");
+        bail!("Feature `windows-credential-manager` is missing");
     }
 
     #[cfg(not(target_os = "windows"))]
     fn init(&self) -> Result<()> {
-        bail!("Feature `windows-native` is not available on this platform");
+        bail!("Feature `windows-credential-manager` is not available on this platform");
     }
 }

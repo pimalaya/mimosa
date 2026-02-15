@@ -16,15 +16,15 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
-default = ["dbus-secret-service", "apple-native", "windows-native"]
+default = ["dbus-secret-service", "apple-keychain", "windows-credential-manager"]
 
 # Keyring backends
 #
 dbus-secret-service = ["dep:dbus-secret-service-keyring-store"]
 zbus-secret-service = ["dep:zbus-secret-service-keyring-store"]
-linux-keyutils = ["dep:linux-keyutils-keyring-store"]
-apple-native = ["dep:apple-native-keyring-store"]
-windows-native = ["dep:windows-native-keyring-store"]
+keyutils = ["dep:linux-keyutils-keyring-store"]
+apple-keychain = ["dep:apple-native-keyring-store"]
+windows-credential-manager = ["dep:windows-native-keyring-store"]
 
 # Vendored (D-Bus)
 #
