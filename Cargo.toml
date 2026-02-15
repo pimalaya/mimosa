@@ -56,4 +56,4 @@ secrecy = "0.10"
 serde = { version = "1", features = ["derive"] }
 
 [patch.crates-io]
-zbus-secret-service-keyring-store.git = "https://github.com/roufpup/zbus-secret-service-keyring-store"
+zbus-secret-service-keyring-store.git = "https://github.com/soywod/zbus-secret-service-keyring-store"

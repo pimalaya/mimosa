@@ -10,7 +10,7 @@
 #
 # Defaults to the first available for your OS.
 #
-#store = "secret-service"
+store = "secret-service"
 
 
 # The keyring service name.

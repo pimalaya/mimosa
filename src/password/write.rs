@@ -30,7 +30,7 @@ use serde::Serialize;
 
 use crate::{config::Config, store::StoreExt};
 
-/// Set a secret in the store.
+/// Write a password into the store.
 ///
 /// If PASSWORD is given and points to an existing file, its content
 /// is used as the secret. Otherwise the argument itself is used as

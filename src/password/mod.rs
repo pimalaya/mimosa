@@ -33,8 +33,11 @@ use crate::{
 
 #[derive(Subcommand, Debug)]
 pub enum PasswordCommand {
+    #[command(visible_aliases = ["get", "show"])]
     Read(ReadPasswordCommand),
+    #[command(visible_aliases = ["set", "update", "edit"])]
     Write(WritePasswordCommand),
+    #[command(visible_aliases = ["rm", "delete", "del"])]
     Remove(RemovePasswordCommand),
 }
 

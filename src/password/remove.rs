@@ -25,7 +25,7 @@ use serde::Serialize;
 
 use crate::{config::Config, store::StoreExt};
 
-/// Remove a secret from the store.
+/// Remove a password from the store.
 #[derive(Parser, Debug)]
 pub struct RemovePasswordCommand {
     /// Name of the store in the configuration file.

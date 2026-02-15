@@ -16,6 +16,8 @@
 // License along with this program. If not, see
 // <https://www.gnu.org/licenses/>.
 
+use std::fmt;
+
 use anyhow::Result;
 use clap::Parser;
 use pimalaya_toolbox::terminal::printer::Printer;
@@ -24,10 +26,10 @@ use serde::{ser::SerializeStruct, Serialize, Serializer};
 
 use crate::{config::Config, store::StoreExt};
 
-/// Get a secret from the store.
+/// Read a password from the store.
 ///
-/// The raw secret is printed to stdout, making it easy to pipe
-/// into other commands.
+/// The raw password is printed to stdout, making it easy to pipe into
+/// other commands.
 #[derive(Parser, Debug)]
 pub struct ReadPasswordCommand {
     /// Name of the store in the configuration file.
@@ -51,8 +53,8 @@ impl Serialize for Password {
     }
 }
 
-impl std::fmt::Display for Password {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl fmt::Display for Password {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0.expose_secret())
     }
 }
