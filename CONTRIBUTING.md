@@ -1,6 +1,6 @@
 # Contributing guide
 
-Thank you for investing your time in contributing to Ortie CLI!
+Thank you for investing your time in contributing to Mimosa CLI!
 
 ## Development
 
@@ -34,4 +34,4 @@ cargo build --no-default-features --release
 
 ## Commit style
 
-Ortie CLI follows the [conventional commits specification](https://www.conventionalcommits.org/en/v1.0.0/#summary).
+Mimosa CLI follows the [conventional commits specification](https://www.conventionalcommits.org/en/v1.0.0/#summary).

@@ -1,4 +1,4 @@
-# Mimosa [![Matrix](https://img.shields.io/badge/chat-%23pimalaya-blue?style=flat&logo=matrix&logoColor=white)](https://matrix.to/#/#pimalaya:matrix.org)
+# 🔑 Mimosa [![Releases](https://img.shields.io/github/v/release/pimalaya/mimosa?color=success)](https://github.com/pimalaya/mimosa/releases/latest) [![Repology](https://img.shields.io/repology/repositories/mimosa?color=success)]("https://repology.org/project/mimosa/versions) [![Matrix](https://img.shields.io/badge/chat-%23pimalaya-blue?style=flat&logo=matrix&logoColor=white)](https://matrix.to/#/#pimalaya:matrix.org) [![Mastodon](https://img.shields.io/badge/news-%40pimalaya-blue?style=flat&logo=mastodon&logoColor=white)](https://fosstodon.org/@pimalaya)
 
 CLI to manage passwords
 
@@ -17,9 +17,10 @@ CLI to manage passwords
 - Simple **CRUD** operations for passwords
 - Multiple **keyring** backends via cargo features:
   - D-Bus Secret Service on Linux (requires `dbus-secret-service` feature)
+  - Z-Bus Secret Service on Linux (requires `zbus-secret-service` feature)
+  - Keyutils on Linux (requires `keyutils` feature)
   - Apple Keychain on macOS (requires `apple-keychain` feature)
   - Windows Credential Manager (requires `windows-credential-manager` feature)
-- Shell **command** backend (requires `command` feature)
 - **TOML** configuration
 - **JSON** output with `--json`
 
@@ -93,60 +94,43 @@ The wizard is not yet available (it should come soon), meanwhile you can manuall
 - Paste it into a new file `~/.config/mimosa/config.toml`
 - Edit, then comment or uncomment the options you want
 
-### Keyring backend
-
-The keyring backend stores passwords in your system's native keyring. Each entry is identified by a service name and a user name.
-
-```toml
-[accounts.my-email]
-default = true
-
-[accounts.my-email.backend.keyring]
-service = "himalaya"
-user = "me@example.com"
-```
-
-### Command backend
-
-The command backend delegates password management to external shell commands.
-
-```toml
-[accounts.my-email]
-default = true
-
-[accounts.my-email.backend.command]
-get = ["pass", "show", "email/me"]
-set = ["pass", "insert", "-e", "email/me"]
-delete = ["pass", "rm", "email/me"]
-```
-
 ## Usage
 
-### Get a password
+### Write a password
+
+You can either give the password as an argument, give a path of a valid file containing your password, or using Unix pipes or redirection:
 
 ```
-$ mimosa password get
-s3cr3tP4$$w0rd
+$ mimosa password write ***
+$ mimosa password write /path/to/***
+$ mimosa password write < /path/to/***
+$ echo *** | mimosa password write
+
+Password successfully written to keyring
 ```
 
-### Set a password
+### Read a password
 
 ```
-$ echo "s3cr3tP4$$w0rd" | mimosa password set
-Password successfully saved
+$ mimosa password read
+
+***
 ```
 
-### Delete a password
+With the `--json` argument:
 
 ```
-$ mimosa password delete
-Password successfully deleted
+$ mimosa password read --json
+
+{"password":"***"}
 ```
 
-### Use a specific account
+### Remove a password
 
 ```
-$ mimosa password get -a my-other-account
+$ mimosa password remove
+
+Password successfully removed from example
 ```
 
 ## FAQ
@@ -163,7 +147,7 @@ The advanced way is based on environment variables:
 Logs are written to the `stderr`, which means that you can redirect them easily to a file:
 
 ```
-mimosa password get --debug 2>/tmp/mimosa.log
+mimosa password read --debug 2>/tmp/mimosa.log
 ```
 
 ## Social

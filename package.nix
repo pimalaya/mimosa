@@ -11,7 +11,6 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellFiles,
   lib,
-  openssl,
   pkg-config,
   rustPlatform,
   stdenv,
@@ -32,7 +31,6 @@ let
   exe = stdenv.hostPlatform.extensions.executable;
 
   # dbus-secret-service feature is part of default cargo features
-  hasSecretService = hasDbusSecretService || builtins.elem "zbus-secret-service" buildFeatures;
   hasDbusSecretService = !buildNoDefaultFeatures || builtins.elem "dbus-secret-service" buildFeatures;
 
   dbus' = dbus.overrideAttrs (old: {
@@ -57,11 +55,6 @@ rustPlatform.buildRustPackage {
     rev = "v${version}";
   };
 
-  env = {
-    # OpenSSL should not be provided by vendors, not even on Windows
-    OPENSSL_NO_VENDOR = "1";
-  };
-
   nativeBuildInputs =
     [ ]
     ++ lib.optional hasDbusSecretService pkg-config
@@ -69,7 +62,6 @@ rustPlatform.buildRustPackage {
 
   buildInputs =
     [ ]
-    ++ lib.optional hasSecretService openssl
     # D-Bus is provided by vendors on Windows
     ++ lib.optional (hasDbusSecretService && !isWindows) dbus';
 

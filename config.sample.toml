@@ -3,24 +3,23 @@
 # The store type.
 #
 # Possible values:
-#   "secret-service"  - Secret Service (Linux, FreeBSD)
-#   "keyutils"  - Linux kernel keyutils (Linux, non-persistent)
-#   "apple-keychain"    - Apple Keychain (macOS)
-#   "windows-credential-manager"  - Windows Credential Manager (Windows)
+#   "secret-service"             - Secret Service (Linux, FreeBSD)
+#   "keyutils"                   - Linux kernel keyutils (Linux, non-persistent)
+#   "apple-keychain"             - Apple Keychain (macOS)
+#   "windows-credential-manager" - Windows Credential Manager (Windows)
 #
-store = "secret-service"
+# Defaults to the first available for your OS.
+#
+#store = "secret-service"
 
-# Secret Service store configuration.
-#
-[stores.example.secret-service]
 
 # The keyring service name.
 #
-service = "my-app"
+secret-service.service = "my-app"
 
 # The keyring user name.
 #
-user = "me@example.com"
+secret-service.user = "me@example.com"
 
 # The Secret Service implementation to use.
 # When omitted, the best available is chosen automatically

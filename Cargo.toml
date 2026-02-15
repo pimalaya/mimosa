@@ -28,7 +28,7 @@ windows-credential-manager = ["dep:windows-native-keyring-store"]
 
 # Vendored (D-Bus)
 #
-vendored = ["dbus-secret-service-keyring-store?/crypto-openssl"]
+vendored = ["dbus-secret-service-keyring-store?/vendored"]
 
 [build-dependencies]
 pimalaya-toolbox = { version = "0.0.4", default-features = false, features = ["build"] }
@@ -41,7 +41,7 @@ linux-keyutils-keyring-store = { version = "0.2", optional = true }
 
 [target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
 dbus-secret-service-keyring-store = { version = "0.3", default-features = false, features = ["crypto-rust"], optional = true }
-zbus-secret-service-keyring-store = { version = "0.2", default-features = false, features = ["rt-async-io-crypto-rust"], optional = true }
+zbus-secret-service-keyring-store = { version = "0.2", default-features = false, features = ["crypto-rust"], optional = true }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 windows-native-keyring-store = { version = "0.5", optional = true }
@@ -54,3 +54,6 @@ log = "0.4"
 pimalaya-toolbox = { version = "0.0.4", default-features = false, features = ["config", "terminal"] }
 secrecy = "0.10"
 serde = { version = "1", features = ["derive"] }
+
+[patch.crates-io]
+zbus-secret-service-keyring-store.git = "https://github.com/roufpup/zbus-secret-service-keyring-store"

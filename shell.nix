@@ -7,18 +7,16 @@
 }@args:
 
 let
-  inherit (pkgs) dbus openssl;
+  inherit (pkgs) dbus;
   shell = pimalaya.mkShell (removeAttrs args [ "pimalaya" ]);
 
 in
 shell.overrideAttrs (prev: {
   LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
     dbus
-    openssl
   ];
 
   buildInputs = (prev.buildInputs or [ ]) ++ [
     dbus
-    openssl
   ];
 })

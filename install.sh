@@ -9,16 +9,16 @@ die() {
 
 DESTDIR="${DESTDIR:-}"
 PREFIX="${PREFIX:-"$DESTDIR/usr/local"}"
-RELEASES_URL="https://github.com/pimalaya/ortie/releases"
+RELEASES_URL="https://github.com/pimalaya/mimosa/releases"
 
-binary=ortie
+binary=mimosa
 system=$(uname -s | tr [:upper:] [:lower:])
 machine=$(uname -m | tr [:upper:] [:lower:])
 
 case $system in
     msys*|mingw*|cygwin*|win*)
 	target=x86_64-windows
-	binary=ortie.exe;;
+	binary=mimosa.exe;;
 
     linux|freebsd)
 	case $machine in
@@ -45,11 +45,11 @@ tmpdir=$(mktemp -d) || die "Cannot create temporary directory"
 trap "rm -rf $tmpdir" EXIT
 
 echo "Downloading latest $system release…"
-curl -sLo "$tmpdir/ortie.tgz" \
-     "$RELEASES_URL/latest/download/ortie.$target.tgz"
+curl -sLo "$tmpdir/mimosa.tgz" \
+     "$RELEASES_URL/latest/download/mimosa.$target.tgz"
 
 echo "Installing binary…"
-tar -xzf "$tmpdir/ortie.tgz" -C "$tmpdir"
+tar -xzf "$tmpdir/mimosa.tgz" -C "$tmpdir"
 
 mkdir -p "$PREFIX/bin"
 cp -f -- "$tmpdir/$binary" "$PREFIX/bin/$binary"
