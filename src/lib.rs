@@ -1,4 +1,4 @@
-// This file is part of Mimosa, a CLI to manage secrets.
+// This file is part of Mimosa, a CLI to manage passwords.
 //
 // Copyright (C) 2026 Clément DOUIN <pimalaya.org@posteo.net>
 //
@@ -19,14 +19,8 @@
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 #![doc = include_str!("../README.md")]
 
-#[cfg(not(any(feature = "keyring", feature = "command")))]
-compile_error!(
-    "At least one backend feature must be enabled: \
-     keyring (dbus-secret-service, apple-native, windows-native) or command"
-);
-
-pub mod account;
-pub mod backend;
 pub mod cli;
 pub mod config;
+pub mod keyring;
 pub mod password;
+pub mod store;

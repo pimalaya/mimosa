@@ -1,5 +1,5 @@
 {
-  description = "CLI to manage secrets";
+  description = "CLI to manage passwords";
 
   inputs = {
     nixpkgs = {

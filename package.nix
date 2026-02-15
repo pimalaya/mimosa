@@ -94,7 +94,7 @@ rustPlatform.buildRustPackage {
     '';
 
   meta = {
-    description = "CLI to manage secrets";
+    description = "CLI to manage passwords";
     mainProgram = "mimosa";
     homepage = "https://github.com/pimalaya/mimosa";
     changelog = "https://github.com/pimalaya/mimosa/blob/v${version}/CHANGELOG.md";

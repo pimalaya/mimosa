@@ -1,4 +1,4 @@
-// This file is part of Mimosa, a CLI to manage secrets.
+// This file is part of Mimosa, a CLI to manage passwords.
 //
 // Copyright (C) 2026 Clément DOUIN <pimalaya.org@posteo.net>
 //
@@ -27,11 +27,8 @@ fn main() {
 
     let mut printer = StdoutPrinter::new(&cli.json);
     let config_paths = cli.config.paths.as_ref();
-    let account_name = cli.account.name.as_deref();
 
-    let result = cli
-        .command
-        .execute(&mut printer, config_paths, account_name);
+    let result = cli.command.execute(&mut printer, config_paths);
 
     ErrorReport::eval(&mut printer, result)
 }

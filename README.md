@@ -1,6 +1,6 @@
 # Mimosa [![Matrix](https://img.shields.io/badge/chat-%23pimalaya-blue?style=flat&logo=matrix&logoColor=white)](https://matrix.to/#/#pimalaya:matrix.org)
 
-CLI to manage secrets
+CLI to manage passwords
 
 ## Table of contents
 

@@ -1,4 +1,4 @@
-// This file is part of Mimosa, a CLI to manage secrets.
+// This file is part of Mimosa, a CLI to manage passwords.
 //
 // Copyright (C) 2026 Clément DOUIN <pimalaya.org@posteo.net>
 //
@@ -25,7 +25,7 @@ use pimalaya_toolbox::{
     long_version,
     terminal::{
         clap::{
-            args::{AccountArg, ConfigPathsArg, JsonFlag, LogFlags},
+            args::{ConfigPathsArg, JsonFlag, LogFlags},
             commands::{CompletionCommand, ManualCommand},
         },
         printer::Printer,
@@ -45,8 +45,6 @@ pub struct Cli {
     #[command(flatten)]
     pub config: ConfigPathsArg,
     #[command(flatten)]
-    pub account: AccountArg,
-    #[command(flatten)]
     pub json: JsonFlag,
     #[command(flatten)]
     pub log: LogFlags,
@@ -63,17 +61,11 @@ pub enum MimosaCommand {
 }
 
 impl MimosaCommand {
-    pub fn execute(
-        self,
-        printer: &mut impl Printer,
-        config_paths: &[PathBuf],
-        account_name: Option<&str>,
-    ) -> Result<()> {
+    pub fn execute(self, printer: &mut impl Printer, config_paths: &[PathBuf]) -> Result<()> {
         match self {
             Self::Password(cmd) => {
                 let config = Config::from_paths_or_default(config_paths)?;
-                let (_, account) = config.get_account(account_name)?;
-                cmd.execute(printer, account)
+                cmd.execute(printer, &config)
             }
             Self::Manuals(cmd) => cmd.execute(printer, Cli::command()),
             Self::Completions(cmd) => cmd.execute(printer, Cli::command()),

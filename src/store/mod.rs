@@ -1,4 +1,4 @@
-// This file is part of Mimosa, a CLI to manage secrets.
+// This file is part of Mimosa, a CLI to manage passwords.
 //
 // Copyright (C) 2026 Clément DOUIN <pimalaya.org@posteo.net>
 //
@@ -16,15 +16,13 @@
 // License along with this program. If not, see
 // <https://www.gnu.org/licenses/>.
 
-use serde::{Deserialize, Serialize};
+pub mod de;
+pub mod keyutils;
+pub mod macos;
+#[path = "secret-service.rs"]
+pub mod secret_service;
+mod store;
+pub mod windows;
 
-use crate::backend::Backend;
-
-/// The account configuration.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub struct Account {
-    #[serde(default)]
-    pub default: bool,
-    pub backend: Backend,
-}
+#[doc(inline)]
+pub use self::store::*;

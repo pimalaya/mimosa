@@ -1,4 +1,4 @@
-// This file is part of Mimosa, a CLI to manage secrets.
+// This file is part of Mimosa, a CLI to manage passwords.
 //
 // Copyright (C) 2026 Clément DOUIN <pimalaya.org@posteo.net>
 //
@@ -19,29 +19,40 @@
 use anyhow::Result;
 use clap::Parser;
 use pimalaya_toolbox::terminal::printer::Printer;
-use serde::Serialize;
+use secrecy::{ExposeSecret, SecretString};
+use serde::{ser::SerializeStruct, Serialize, Serializer};
 
-use crate::account::Account;
+use crate::{config::Config, store::StoreExt};
 
-/// Get a password from the configured backend.
+/// Get a secret from the store.
 ///
-/// The raw password is printed to stdout, making it easy to pipe
+/// The raw secret is printed to stdout, making it easy to pipe
 /// into other commands.
 #[derive(Parser, Debug)]
-pub struct GetPasswordCommand {}
+pub struct ReadPasswordCommand {
+    /// Name of the store in the configuration file.
+    pub store: String,
+}
 
-impl GetPasswordCommand {
-    pub fn execute(self, printer: &mut impl Printer, account: Account) -> Result<()> {
-        let password = account.backend.get_password()?;
+impl ReadPasswordCommand {
+    pub fn execute(self, printer: &mut impl Printer, config: &Config) -> Result<()> {
+        let password = config.get_store(&self.store)?.read()?;
         printer.out(Password(password))
     }
 }
 
-#[derive(Serialize)]
-struct Password(String);
+struct Password(SecretString);
+
+impl Serialize for Password {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let mut s = serializer.serialize_struct("Password", 1)?;
+        s.serialize_field("password", self.0.expose_secret())?;
+        s.end()
+    }
+}
 
 impl std::fmt::Display for Password {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        write!(f, "{}", self.0.expose_secret())
     }
 }

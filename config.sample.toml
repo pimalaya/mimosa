@@ -1,22 +1,31 @@
-[accounts.example]
+[stores.example]
 
-# Make this current account the default one to use when no account is
-# specified in the CLI with the --account argument.
+# The store type.
 #
-default = true
+# Possible values:
+#   "secret-service"  - Secret Service (Linux, FreeBSD)
+#   "linux-keyutils"  - Linux kernel keyutils (Linux, non-persistent)
+#   "apple-native"    - Apple Keychain (macOS)
+#   "windows-native"  - Windows Credential Manager (Windows)
+#
+store = "secret-service"
 
-# Keyring backend: stores passwords in the system keyring.
-# Requires a keyring feature (dbus-secret-service, apple-native,
-# or windows-native).
+# Secret Service store configuration.
 #
-[accounts.example.backend.keyring]
+[stores.example.secret-service]
+
+# The keyring service name.
+#
 service = "my-app"
+
+# The keyring user name.
+#
 user = "me@example.com"
 
-# Command backend: delegates password management to shell commands.
-# Requires the `command` feature.
+# The Secret Service implementation to use.
+# When omitted, the best available is chosen automatically
+# (dbus if available, then zbus).
 #
-#[accounts.example.backend.command]
-#get = ["pass", "show", "my-app/me"]
-#set = ["pass", "insert", "-e", "my-app/me"]
-#delete = ["pass", "rm", "my-app/me"]
+# Possible values: "dbus", "zbus"
+#
+#flavour = "dbus"

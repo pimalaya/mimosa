@@ -16,34 +16,47 @@
 // License along with this program. If not, see
 // <https://www.gnu.org/licenses/>.
 
-pub mod read;
-pub mod remove;
-pub mod write;
+use std::fmt;
 
 use anyhow::Result;
-use clap::Subcommand;
+use clap::Parser;
 use pimalaya_toolbox::terminal::printer::Printer;
+use serde::Serialize;
 
-use crate::{
-    config::Config,
-    password::{
-        read::ReadPasswordCommand, remove::RemovePasswordCommand, write::WritePasswordCommand,
-    },
-};
+use crate::{config::Config, store::StoreExt};
 
-#[derive(Subcommand, Debug)]
-pub enum PasswordCommand {
-    Read(ReadPasswordCommand),
-    Write(WritePasswordCommand),
-    Remove(RemovePasswordCommand),
+/// Remove a secret from the store.
+#[derive(Parser, Debug)]
+pub struct RemovePasswordCommand {
+    /// Name of the store in the configuration file.
+    pub store: String,
 }
 
-impl PasswordCommand {
+impl RemovePasswordCommand {
     pub fn execute(self, printer: &mut impl Printer, config: &Config) -> Result<()> {
-        match self {
-            Self::Read(cmd) => cmd.execute(printer, config),
-            Self::Write(cmd) => cmd.execute(printer, config),
-            Self::Remove(cmd) => cmd.execute(printer, config),
+        let removed = config.get_store(&self.store)?.remove()?;
+
+        printer.out(PasswordRemoved {
+            store: self.store,
+            removed,
+        })
+    }
+}
+
+#[derive(Serialize)]
+struct PasswordRemoved {
+    store: String,
+    removed: bool,
+}
+
+impl fmt::Display for PasswordRemoved {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let s = &self.store;
+
+        if self.removed {
+            write!(f, "Password successfully removed from {s}")
+        } else {
+            write!(f, "No password found in {s}, nothing was removed")
         }
     }
 }
