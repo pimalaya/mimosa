@@ -1117,7 +1117,7 @@ dependencies = [
 
 [[package]]
 name = "mimosa"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "apple-native-keyring-store",
@@ -2396,7 +2396,8 @@ dependencies = [
 [[package]]
 name = "zbus-secret-service-keyring-store"
 version = "0.2.2"
-source = "git+https://github.com/soywod/zbus-secret-service-keyring-store#9dd9ef4ff477cbe3847b4be0a253cfcdf808d8b8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf419566ebb630f83a49d67ef0b6c719c827fa04a8486a19f0808102d5a7f9ea"
 dependencies = [
  "keyring-core",
  "secret-service",

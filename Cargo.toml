@@ -1,7 +1,7 @@
 [package]
 name = "mimosa"
 description = "CLI to manage passwords"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["soywod <clement.douin@posteo.net>"]
 edition = "2021"
 license = "AGPL-3.0-only"
@@ -41,7 +41,7 @@ linux-keyutils-keyring-store = { version = "0.2", optional = true }
 
 [target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
 dbus-secret-service-keyring-store = { version = "0.3", default-features = false, features = ["crypto-rust"], optional = true }
-zbus-secret-service-keyring-store = { version = "0.2", default-features = false, features = ["crypto-rust"], optional = true }
+zbus-secret-service-keyring-store = { version = "0.2", default-features = false, features = ["rt-async-io-crypto-rust"], optional = true }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 windows-native-keyring-store = { version = "0.5", optional = true }
@@ -54,6 +54,3 @@ log = "0.4"
 pimalaya-toolbox = { version = "0.0.4", default-features = false, features = ["config", "terminal"] }
 secrecy = "0.10"
 serde = { version = "1", features = ["derive"] }
-
-[patch.crates-io]
-zbus-secret-service-keyring-store.git = "https://github.com/soywod/zbus-secret-service-keyring-store"
