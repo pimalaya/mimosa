@@ -37,13 +37,13 @@ Mimosa CLI can be installed with the installer:
 
 *As root:*
 
-```
+```sh
 curl -sSL https://raw.githubusercontent.com/pimalaya/mimosa/master/install.sh | sudo sh
 ```
 
 *As a regular user:*
 
-```
+```sh
 curl -sSL https://raw.githubusercontent.com/pimalaya/mimosa/master/install.sh | PREFIX=~/.local sh
 ```
 
@@ -53,13 +53,13 @@ These commands install the latest binary from the GitHub [releases](https://gith
 
 Mimosa CLI can be installed with [cargo](https://doc.rust-lang.org/cargo/):
 
-```
+```sh
 cargo install mimosa
 ```
 
 You can also use the git repository for a more up-to-date (but less stable) version:
 
-```
+```sh
 cargo install --locked --git https://github.com/pimalaya/mimosa.git
 ```
 
@@ -67,25 +67,25 @@ cargo install --locked --git https://github.com/pimalaya/mimosa.git
 
 Mimosa CLI can be installed with [Nix](https://serokell.io/blog/what-is-nix):
 
-```
+```sh
 nix-env -i mimosa
 ```
 
 You can also use the git repository for a more up-to-date (but less stable) version:
 
-```
+```sh
 nix-env -if https://github.com/pimalaya/mimosa/archive/master.tar.gz
 ```
 
 If you have the [Flakes](https://nixos.wiki/wiki/Flakes) feature enabled:
 
-```
+```sh
 nix profile install mimosa
 ```
 
 *You can also run Mimosa directly without installing it:*
 
-```
+```sh
 nix run mimosa
 ```
 
@@ -103,7 +103,7 @@ The wizard is not yet available (it should come soon), meanwhile you can manuall
 
 You can either give the password as an argument, give a path of a valid file containing your password, or using Unix pipes or redirection:
 
-```
+```sh
 $ mimosa password write ***
 $ mimosa password write /path/to/***
 $ mimosa password write < /path/to/***
@@ -114,7 +114,7 @@ Password successfully written to keyring
 
 ### Read a password
 
-```
+```sh
 $ mimosa password read
 
 ***
@@ -122,7 +122,7 @@ $ mimosa password read
 
 With the `--json` argument:
 
-```
+```sh
 $ mimosa password read --json
 
 {"password":"***"}
@@ -130,7 +130,7 @@ $ mimosa password read --json
 
 ### Remove a password
 
-```
+```sh
 $ mimosa password remove
 
 Password successfully removed from example
@@ -149,7 +149,7 @@ The advanced way is based on environment variables:
 
 Logs are written to the `stderr`, which means that you can redirect them easily to a file:
 
-```
+```sh
 mimosa password read --debug 2>/tmp/mimosa.log
 ```
 
