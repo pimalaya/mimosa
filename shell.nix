@@ -7,7 +7,7 @@
 }@args:
 
 let
-  inherit (pkgs) dbus;
+  inherit (pkgs) cargo-deny dbus pkg-config;
   shell = pimalaya.mkShell (removeAttrs args [ "pimalaya" ]);
 
 in
@@ -16,7 +16,12 @@ shell.overrideAttrs (prev: {
     dbus
   ];
 
+  nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [
+    pkg-config
+  ];
+
   buildInputs = (prev.buildInputs or [ ]) ++ [
+    cargo-deny
     dbus
   ];
 })

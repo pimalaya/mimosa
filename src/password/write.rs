@@ -1,20 +1,21 @@
 // This file is part of Mimosa, a CLI to manage passwords.
 //
-// Copyright (C) 2026 Clément DOUIN <pimalaya.org@posteo.net>
+// Copyright (C) 2026  soywod <pimalaya.org@posteo.net>
 //
-// This program is free software: you can redistribute it and/or
-// modify it under the terms of the GNU Affero General Public License
-// as published by the Free Software Foundation, either version 3 of
-// the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Affero General Public License for more details.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU Affero General Public
-// License along with this program. If not, see
-// <https://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+//! Implements `mimosa password write <store> [password]`.
 
 use std::{
     fmt, fs,
@@ -24,11 +25,11 @@ use std::{
 
 use anyhow::{Context, Result};
 use clap::Parser;
-use pimalaya_toolbox::terminal::printer::Printer;
+use pimalaya_cli::printer::Printer;
 use secrecy::{ExposeSecret, SecretString};
 use serde::Serialize;
 
-use crate::{config::Config, store::StoreExt};
+use mimosa::{config::Config, store::dispatch::StoreExt};
 
 /// Write a password into the store.
 ///

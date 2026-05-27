@@ -1,39 +1,44 @@
-# 🔑 Mimosa [![Releases](https://img.shields.io/github/v/release/pimalaya/mimosa?color=success)](https://github.com/pimalaya/mimosa/releases/latest) [![Repology](https://img.shields.io/repology/repositories/mimosa?color=success)]("https://repology.org/project/mimosa/versions) [![Matrix](https://img.shields.io/badge/chat-%23pimalaya-blue?style=flat&logo=matrix&logoColor=white)](https://matrix.to/#/#pimalaya:matrix.org) [![Mastodon](https://img.shields.io/badge/news-%40pimalaya-blue?style=flat&logo=mastodon&logoColor=white)](https://fosstodon.org/@pimalaya)
+# 🔑 Mimosa [![Documentation](https://img.shields.io/docsrs/mimosa?style=flat&logo=docs.rs&logoColor=white)](https://docs.rs/mimosa/latest/mimosa) [![Matrix](https://img.shields.io/badge/chat-%23pimalaya-blue?style=flat&logo=matrix&logoColor=white)](https://matrix.to/#/#pimalaya:matrix.org) [![Mastodon](https://img.shields.io/badge/news-%40pimalaya-blue?style=flat&logo=mastodon&logoColor=white)](https://fosstodon.org/@pimalaya)
 
 CLI to manage passwords
+
+Mimosa aims to be the missing CLI 
 
 ## Table of contents
 
 - [Features](#features)
 - [Installation](#installation)
+  - [Pre-built binary](#pre-built-binary)
+  - [Cargo](#cargo)
+  - [Nix](#nix)
+  - [Sources](#sources)
 - [Configuration](#configuration)
 - [Usage](#usage)
-  - [Write a password](#write-a-password)
-  - [Read a password](#read-a-password)
-  - [Remove a password](#remove-a-password)
-- [FAQ](#faq)
+  - [Writing a password](#writing-a-password)
+  - [Reading a password](#reading-a-password)
+  - [Removing a password](#removing-a-password)
+  - [Debugging](#debugging)
 - [Social](#social)
 - [Sponsoring](#sponsoring)
 
 ## Features
 
-- Simple **CRUD** operations for passwords
-- Multiple **keyring** backends via cargo features:
-  - D-Bus Secret Service on Linux (requires `dbus-secret-service` feature)
-  - Z-Bus Secret Service on Linux (requires `zbus-secret-service` feature)
-  - Keyutils on Linux (requires `keyutils` feature)
-  - Apple Keychain on macOS (requires `apple-keychain` feature)
-  - Windows Credential Manager (requires `windows-credential-manager` feature)
-- **TOML** configuration
-- **JSON** output with `--json`
+- **D-Bus Secret Service** support on Linux / FreeBSD
+- **Z-Bus Secret Service** support on Linux / FreeBSD
+- **Linux kernel keyutils** support on Linux (in-memory, non-persistent across reboots)
+- **Apple Keychain** support on macOS
+- **Windows Credential Manager** support on Windows
+- **TOML** configuration with multi-store support
+- **JSON** output via `--json`
 
-*Mimosa CLI is written in [Rust](https://www.rust-lang.org/), and relies on [cargo features](https://doc.rust-lang.org/cargo/reference/features.html) to enable or disable functionalities. Default features can be found in the `features` section of the [`Cargo.toml`](https://github.com/pimalaya/mimosa/blob/master/Cargo.toml#L18), or on [docs.rs](https://docs.rs/crate/mimosa/latest/features).*
+> [!TIP]
+> Mimosa is written in [Rust](https://www.rust-lang.org/) and uses [cargo features](https://doc.rust-lang.org/cargo/reference/features.html) to gate keyring backend support. The default feature set is declared in [Cargo.toml](./Cargo.toml).
 
 ## Installation
 
 ### Pre-built binary
 
-Mimosa CLI can be installed with the installer:
+Mimosa can be installed with the installer:
 
 *As root:*
 
@@ -49,108 +54,107 @@ curl -sSL https://raw.githubusercontent.com/pimalaya/mimosa/master/install.sh | 
 
 These commands install the latest binary from the GitHub [releases](https://github.com/pimalaya/mimosa/releases) section.
 
+For a more up-to-date version than the latest release, check out the [releases](https://github.com/pimalaya/mimosa/actions/workflows/releases.yml) GitHub workflow and look for the *Artifacts* section. These pre-built binaries are built from the `master` branch.
+
+> [!NOTE]
+> Such binaries are built with the default cargo features. If you need specific features, please use another installation method.
+
 ### Cargo
-
-Mimosa CLI can be installed with [cargo](https://doc.rust-lang.org/cargo/):
-
-```
-cargo install mimosa
-```
-
-You can also use the git repository for a more up-to-date (but less stable) version:
 
 ```
 cargo install --locked --git https://github.com/pimalaya/mimosa.git
 ```
 
+With only Linux keyutils support:
+
+```
+cargo install --locked --git https://github.com/pimalaya/mimosa.git \
+  --no-default-features \
+  --features keyutils
+```
+
 ### Nix
-
-Mimosa CLI can be installed with [Nix](https://serokell.io/blog/what-is-nix):
-
-```
-nix-env -i mimosa
-```
-
-You can also use the git repository for a more up-to-date (but less stable) version:
-
-```
-nix-env -if https://github.com/pimalaya/mimosa/archive/master.tar.gz
-```
 
 If you have the [Flakes](https://nixos.wiki/wiki/Flakes) feature enabled:
 
 ```
-nix profile install mimosa
+nix profile install github:pimalaya/mimosa
 ```
 
-*You can also run Mimosa directly without installing it:*
+Or run without installing:
 
 ```
-nix run mimosa
+nix run github:pimalaya/mimosa
+```
+
+### Sources
+
+```
+git clone https://github.com/pimalaya/mimosa
+cd mimosa
+nix run
 ```
 
 ## Configuration
 
-The wizard is not yet available (it should come soon), meanwhile you can manually edit your own configuration from scratch:
+Copy [config.sample.toml](./config.sample.toml) into one of the canonical paths below and edit it by hand.
 
-- Copy the content of the documented [`./config.sample.toml`](./config.sample.toml)
-- Paste it into a new file `~/.config/mimosa/config.toml`
-- Edit, then comment or uncomment the options you want
+A configuration is loaded from the first valid path among:
+
+- `$XDG_CONFIG_HOME/mimosa/config.toml`
+- `$HOME/.config/mimosa/config.toml`
+- `$HOME/.mimosarc`
+
+Override the path with `-c <PATH>` or `MIMOSA_CONFIG=<PATH>`; multiple paths can be passed at once, separated by `:`. The first one is the base and the rest are deep-merged on top.
 
 ## Usage
 
-### Write a password
+Every `password` subcommand takes a store name as its first positional argument; the name must match a `[stores.<name>]` block in the configuration file.
 
-You can either give the password as an argument, give a path of a valid file containing your password, or using Unix pipes or redirection:
-
-```
-$ mimosa password write ***
-$ mimosa password write /path/to/***
-$ mimosa password write < /path/to/***
-$ echo *** | mimosa password write
-
-Password successfully written to keyring
-```
-
-### Read a password
+### Writing a password
 
 ```
-$ mimosa password read
-
-***
+mimosa password write <STORE> [PASSWORD]
 ```
 
-With the `--json` argument:
+`PASSWORD` is interpreted as:
+
+- a literal secret if it is a non-empty string and is not a path to an existing file,
+- the contents of the file (trailing newline / carriage return stripped) when the argument resolves to one,
+- the bytes read from stdin if the argument is omitted (supports both piping and shell redirection).
 
 ```
-$ mimosa password read --json
-
-{"password":"***"}
+mimosa password write example my-secret
+mimosa password write example /path/to/secret
+mimosa password write example < /path/to/secret
+echo my-secret | mimosa password write example
 ```
 
-### Remove a password
+### Reading a password
 
 ```
-$ mimosa password remove
-
-Password successfully removed from example
+mimosa password read <STORE>
 ```
 
-## FAQ
+The raw secret is printed to stdout, making it easy to pipe into other commands. With `--json`, the output becomes `{"password":"..."}`.
 
-### How to debug Mimosa CLI?
-
-The simplest way is to use `--debug` and/or `--trace` arguments.
-
-The advanced way is based on environment variables:
-
-- `RUST_LOG=<level>`: determines the log level filter, can be one of `off`, `error`, `warn`, `info`, `debug` and `trace`.
-- `RUST_BACKTRACE=1`: enables the full error backtrace, which include source lines where the error originated from.
-
-Logs are written to the `stderr`, which means that you can redirect them easily to a file:
+### Removing a password
 
 ```
-mimosa password read --debug 2>/tmp/mimosa.log
+mimosa password remove <STORE>
+```
+
+Returns `Password successfully removed from <STORE>` when an entry was deleted, or `No password found in <STORE>, nothing was removed` otherwise.
+
+### Debugging
+
+The `--log-level <LEVEL>` flag controls log verbosity (`off`, `error`, `warn`, `info`, `debug`, `trace`). When omitted, `RUST_LOG` is consulted; it supports per-target filters (see the [env_logger](https://docs.rs/env_logger) docs). `RUST_BACKTRACE=1` enables the full error backtrace.
+
+Logs go to stderr by default; redirect them with `--log-file <PATH>` or shell redirection:
+
+```
+mimosa password read example --log-level debug --log-file /tmp/mimosa.log
+mimosa password read example --log-level trace 2>/tmp/mimosa.log
 ```
 
 ## Social
@@ -165,9 +169,10 @@ mimosa password read --debug 2>/tmp/mimosa.log
 
 Special thanks to the [NLnet foundation](https://nlnet.nl/) and the [European Commission](https://www.ngi.eu/) that have been financially supporting the project for years:
 
-- 2022: [NGI Assure](https://nlnet.nl/project/Himalaya/)
-- 2023: [NGI Zero Entrust](https://nlnet.nl/project/Pimalaya/)
-- 2024: [NGI Zero Core](https://nlnet.nl/project/Pimalaya-PIM/) *(still ongoing in 2026)*
+- 2022 → 2023: [NGI Assure](https://nlnet.nl/project/Himalaya/)
+- 2023 → 2024: [NGI Zero Entrust](https://nlnet.nl/project/Pimalaya/)
+- 2024 → 2026: [NGI Zero Core](https://nlnet.nl/project/Pimalaya-PIM/)
+- *2027 in preparation…*
 
 If you appreciate the project, feel free to donate using one of the following providers:
 

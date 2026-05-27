@@ -1,30 +1,89 @@
+# ================================================================================
+# `mimosa` configuration file.
+#
+# Loaded from the first valid path among:
+#   - $XDG_CONFIG_HOME/mimosa/config.toml
+#   - $HOME/.config/mimosa/config.toml
+#   - $HOME/.mimosarc
+#
+# Override with `mimosa -c <PATH>` or `MIMOSA_CONFIG=<PATH>`. Multiple paths can
+# be passed at once, separated by `:`; the first one is the base and the rest
+# are deep-merged on top of it.
+#
+# Mimosa does not yet ship a wizard: copy this file into one of the paths above
+# and edit by hand. Each `[stores.<name>]` section declares one password entry;
+# `<name>` is the positional argument every `mimosa password` command takes
+# (e.g. `mimosa password read example`).
+# ================================================================================
+
+# --------------------------------------------------------------------------------
+# Store config
+# --------------------------------------------------------------------------------
+
+# Declare one section per password. Pick one with
+# `mimosa password <read|write|remove> <NAME>`.
 [stores.example]
 
-# The store type.
+# Keyring backend selecting which OS-native store this entry lives in. Must
+# match the per-backend block declared below. Required.
 #
 # Possible values:
-#   "secret-service"             - Secret Service (Linux, FreeBSD)
-#   "keyutils"                   - Linux kernel keyutils (Linux, non-persistent)
-#   "apple-keychain"             - Apple Keychain (macOS)
-#   "windows-credential-manager" - Windows Credential Manager (Windows)
-#
-# Defaults to the first available for your OS.
-#
+#   "secret-service"  - D-Bus or zbus Secret Service (Linux, FreeBSD)
+#   "linux-keyutils"  - Linux kernel keyutils (non-persistent across reboots)
+#   "apple-native"    - Apple Keychain (macOS)
+#   "windows-native"  - Windows Credential Manager
 store = "secret-service"
 
+# --------------------------------------------------------------------------------
+# Secret Service config
+# https://specifications.freedesktop.org/secret-service-spec/latest/
+# --------------------------------------------------------------------------------
 
-# The keyring service name.
-#
+# `service` attribute of the Secret Service item; combined with `user` to form
+# the unique lookup key.
 secret-service.service = "my-app"
 
-# The keyring user name.
-#
+# `account` / `user` attribute of the Secret Service item.
 secret-service.user = "me@example.com"
 
-# The Secret Service implementation to use.
-# When omitted, the best available is chosen automatically
-# (dbus if available, then zbus).
+# Secret Service client implementation. When omitted, the best available is
+# picked at runtime (`dbus` first when compiled in, then `zbus`).
 #
 # Possible values: "dbus", "zbus"
-#
-#flavour = "dbus"
+#secret-service.flavour = "dbus"
+
+# --------------------------------------------------------------------------------
+# Linux keyutils config
+# https://man7.org/linux/man-pages/man7/keyrings.7.html
+# --------------------------------------------------------------------------------
+
+# Description prefix of the kernel key; combined with `user` to form the
+# unique lookup key. Note: keyutils entries are wiped at reboot.
+#linux-keyutils.service = "my-app"
+
+# Description suffix of the kernel key, usually the user identifier or email.
+#linux-keyutils.user = "me@example.com"
+
+# --------------------------------------------------------------------------------
+# Apple Keychain config
+# https://developer.apple.com/documentation/security/keychain_services
+# --------------------------------------------------------------------------------
+
+# `kSecAttrService` of the Keychain item; combined with `user` to form the
+# unique lookup key.
+#apple-native.service = "my-app"
+
+# `kSecAttrAccount` of the Keychain item.
+#apple-native.user = "me@example.com"
+
+# --------------------------------------------------------------------------------
+# Windows Credential Manager config
+# https://learn.microsoft.com/en-us/windows/win32/api/wincred/
+# --------------------------------------------------------------------------------
+
+# `TargetName` prefix of the credential; combined with `user` to form the
+# unique lookup key.
+#windows-native.service = "my-app"
+
+# `UserName` of the credential.
+#windows-native.user = "me@example.com"

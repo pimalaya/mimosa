@@ -4,8 +4,7 @@ Thank you for investing your time in contributing to Mimosa CLI!
 
 ## Development
 
-The development environment is managed by [Nix](https://nixos.org/download.html).
-Running `nix-shell` will spawn a shell with everything you need to get started with the lib.
+The development environment is managed by [Nix](https://nixos.org/download.html). Running `nix develop` (Flakes) or `nix-shell` spawns a shell with everything needed to build the CLI.
 
 If you do not want to use Nix, you can either use [rustup](https://rust-lang.github.io/rustup/index.html):
 
