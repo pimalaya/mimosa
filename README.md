@@ -1,8 +1,9 @@
-# 🔑 Mimosa [![Documentation](https://img.shields.io/docsrs/mimosa?style=flat&logo=docs.rs&logoColor=white)](https://docs.rs/mimosa/latest/mimosa) [![Matrix](https://img.shields.io/badge/chat-%23pimalaya-blue?style=flat&logo=matrix&logoColor=white)](https://matrix.to/#/#pimalaya:matrix.org) [![Mastodon](https://img.shields.io/badge/news-%40pimalaya-blue?style=flat&logo=mastodon&logoColor=white)](https://fosstodon.org/@pimalaya)
+# 🔑 Mimosa [![Matrix](https://img.shields.io/badge/chat-%23pimalaya-blue?style=flat&logo=matrix&logoColor=white)](https://matrix.to/#/#pimalaya:matrix.org) [![Mastodon](https://img.shields.io/badge/news-%40pimalaya-blue?style=flat&logo=mastodon&logoColor=white)](https://fosstodon.org/@pimalaya)
 
 CLI to manage passwords
 
-Mimosa aims to be the missing CLI 
+> [!WARNING]
+> Mimosa is no longer maintained. The reason behind is that the maintenance cost was not worth the value it brought. MacOS and Windows already expose a CLI, and GNOME users already have `secret-tool` exposed. The only true usage was for users using Linux but not GNOME, or for testing purpose (keyutils). There is enough CLIs available out there, no need another one!
 
 ## Table of contents
 
